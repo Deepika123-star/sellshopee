@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "242265743164",
+    "project_id": "sellshopee-f94ab",
+    "storage_bucket": "sellshopee-f94ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:242265743164:android:45b44cead293aa693e0839",
+        "android_client_info": {
+          "package_name": "com.smartwebarts.sellshopee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "242265743164-ejgfeo6bp8067abjvq6vt0rutjrteefv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.smartwebarts.sellshopee",
+            "certificate_hash": "deabadeca4c5ed881877265d410781be50457746"
+          }
+        },
+        {
+          "client_id": "242265743164-cmoqvj74h74lset4nrj9lluecb2j8e2j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgD8i_BveKV1oEmc4zoqyX3QfqtZ-7IQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "242265743164-cmoqvj74h74lset4nrj9lluecb2j8e2j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
