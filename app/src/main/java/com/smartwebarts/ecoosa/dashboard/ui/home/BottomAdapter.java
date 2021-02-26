@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.smartwebarts.ecoosa.R;
+import com.smartwebarts.ecoosa.category.CategoryActivity;
 import com.smartwebarts.ecoosa.models.CategoryModel;
 import com.smartwebarts.ecoosa.models.SubCategoryModel;
 import com.smartwebarts.ecoosa.productlist.ProductListActivity;
@@ -73,14 +74,13 @@ public class BottomAdapter extends RecyclerView.Adapter<BottomAdapter.MyViewHold
             @Override
             public void onClick(View v) {
 
-//                Intent intent = new Intent(context, CategoryActivity.class);
-//                intent.putExtra(CategoryActivity.CATEGORY, list.get(position));
-//                context.startActivity(intent);
-
-
+                Intent intent = new Intent(context, CategoryActivity.class);
+                intent.putExtra(CategoryActivity.CATEGORY, list.get(position));
+                context.startActivity(intent);
+/*
                 Intent intent = new Intent(context, ProductListActivity.class);
                 intent.putExtra("category", list.get(position));
-                context.startActivity(intent);
+                context.startActivity(intent);*/
             }
         });
 

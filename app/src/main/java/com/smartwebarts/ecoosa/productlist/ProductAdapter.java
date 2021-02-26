@@ -45,7 +45,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
         try {
 
-            MyGlide.withCircle(context, ApplicationConstants.INSTANCE.CATEGORY_IMAGES + list.get(position).getImage(), holder.imageView);
+            MyGlide.with(context, ApplicationConstants.INSTANCE.CATEGORY_IMAGES + list.get(position).getImage(), holder.imageView);
 
             holder.textView.setText(list.get(position).getName());
 
@@ -57,7 +57,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             public void onClick(View v) {
 
                 Intent intent = new Intent(context, ProductListActivity.class);
-
                 intent.putExtra("subsubcategory", list.get(position));
                 intent.putExtra("subCategory", subCategory);
                 intent.putExtra("category", category);

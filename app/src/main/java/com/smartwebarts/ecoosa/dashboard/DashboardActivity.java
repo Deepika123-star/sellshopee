@@ -624,13 +624,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     private void checkPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
             // You can use the API that requires the permission.
             turnongps();
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
+
         }
     }
 
@@ -662,11 +662,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         Toolbar toolbar = findViewById(R.id.toolbar);
         Toolbar_Set.INSTANCE.setBottomNav(this);
         setSupportActionBar(toolbar);
+
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerViewBottom = (RecyclerView) findViewById(R.id.recyclerViewBottom);
         home_list_banner =  (SliderLayout) findViewById(R.id.home_img_slider);
         shopbycategory =  (Button) findViewById(R.id.shopbycategory);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+
         setNavigationDrawer();
     }
 }

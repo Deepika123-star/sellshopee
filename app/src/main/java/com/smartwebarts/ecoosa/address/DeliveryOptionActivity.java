@@ -76,8 +76,6 @@ public class DeliveryOptionActivity extends AppCompatActivity  implements Paymen
     public static final String PINCODE  = "pincode";
     public static final String AMOUNT  = "amount";
     public static final String HASHMAP  = "hashmap";
-
-
     private String address, landmark, pincode, date, time = "1", paymentmethod = "", amount;
     private ArrayList<Task> list;
     private HashMap<String, String> hashMap;

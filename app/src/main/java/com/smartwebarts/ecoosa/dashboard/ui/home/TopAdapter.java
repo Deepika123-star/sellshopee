@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import com.smartwebarts.ecoosa.R;
+import com.smartwebarts.ecoosa.category.CategoryActivity;
 import com.smartwebarts.ecoosa.models.CategoryModel;
 import com.smartwebarts.ecoosa.productlist.ProductListActivity;
 import com.smartwebarts.ecoosa.utils.ApplicationConstants;
@@ -44,20 +45,24 @@ public class TopAdapter extends RecyclerView.Adapter<TopAdapter.MyViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Intent intent = new Intent(context, CategoryActivity.class);
+                intent.putExtra(CategoryActivity.CATEGORY, list.get(position));
+                context.startActivity(intent);
 //                Intent intent = new Intent(context, CategoryActivity.class);
 //                intent.putExtra(CategoryActivity.CATEGORY, list.get(position));
 //                context.startActivity(intent);
 
-                Intent intent = new Intent(context, ProductListActivity.class);
-                intent.putExtra("category", list.get(position));
-                context.startActivity(intent);
+//                Intent intent = new Intent(context, ProductListActivity.class);
+//                intent.putExtra("category", list.get(position));
+//                context.startActivity(intent);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return list==null?0:list.size();
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {

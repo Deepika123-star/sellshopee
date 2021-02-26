@@ -53,10 +53,10 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ProductListActivity2.class);
-                intent.putExtra(ProductListActivity2.CID, categoryModel.getId());
-                intent.putExtra(ProductListActivity2.SID, list.get(position).getId());
-                intent.putExtra(ProductListActivity2.SNAME, list.get(position).getName());
+                Intent intent = new Intent(context, SubSubCategoryActivity.class);
+                intent.putExtra(SubSubCategoryActivity.CID, categoryModel);
+                intent.putExtra(SubSubCategoryActivity.SID, list.get(position));
+                intent.putExtra(SubSubCategoryActivity.SNAME, list.get(position).getName());
                 context.startActivity(intent);
             }
         });

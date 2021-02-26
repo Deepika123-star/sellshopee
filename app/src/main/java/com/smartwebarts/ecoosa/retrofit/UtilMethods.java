@@ -75,12 +75,12 @@ public enum UtilMethods {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+
     public void internetNotAvailableMessage(Context context) {
         SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
         dialog .setContentText("Internet Not Available");
         dialog.show();
     }
-
     public boolean isValidMobile(String mobile) {
 
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
@@ -95,7 +95,6 @@ public enum UtilMethods {
     }
 
     public boolean isValidEmail(String email) {
-
         boolean isValid = false;
 
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
@@ -157,7 +156,6 @@ public enum UtilMethods {
     }
 
     public void socialcheck(final Context context, String email , final mCallBackResponse callBackResponse) {
-
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.default_progress_dialog);
@@ -1108,7 +1106,7 @@ public enum UtilMethods {
                 public void onResponse(Call<List<ProductDetailModel>> call, Response<List<ProductDetailModel>> response) {
                     dialog.dismiss();
                     String strResponse = new Gson().toJson(response.body());
-                    Log.e("strResponse",strResponse);
+                    Log.e("strResponseDeepika",strResponse);
                     if (response.body()!=null) {
                         if (response.body().size()>0 ) {
                             callBackResponse.success("", strResponse);
@@ -1966,4 +1964,52 @@ public enum UtilMethods {
     private static void goToMarket(Context mContext) {
         mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(UpdateChecker.ROOT_PLAY_STORE_DEVICE + mContext.getPackageName())));
     }
+
+/*For Attribute*/
+    public void attribut(Context context, String id, final mCallBackResponse callBackResponse) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.default_progress_dialog);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        ProgressBar progressBar = (ProgressBar)dialog.findViewById(R.id.progress);
+        DoubleBounce doubleBounce = new DoubleBounce();
+        progressBar.setIndeterminateDrawable(doubleBounce);
+        dialog.show();
+
+        try {
+            EndPointInterface git = APIClient.getClient().create(EndPointInterface.class);
+            Call<List<AttributModel>> call = git.setAttribute(id);
+            call.enqueue(new Callback<List<AttributModel>>() {
+                @Override
+                public void onResponse(@NotNull Call<List<AttributModel>> call, @NotNull Response<List<AttributModel>> response) {
+                    dialog.dismiss();
+                    String strResponse = new Gson().toJson(response.body());
+                    Log.e("strResponse",strResponse);
+                    if (response.body()!=null) {
+                        if (response.body().size()>0 ) {
+                            callBackResponse.success("", strResponse);
+                        }
+                        else {
+                            callBackResponse.fail("No Data");
+                        }
+                    } else {
+                        callBackResponse.fail("No Data found..?");
+                    }
+                }
+
+                @Override
+                public void onFailure(@NotNull Call<List<AttributModel>> call, @NotNull Throwable t) {
+                    callBackResponse.fail(t.getMessage());
+                    dialog.dismiss();
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            callBackResponse.fail(e.getMessage());
+            dialog.dismiss();
+        }
+    }
+
 }

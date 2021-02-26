@@ -51,8 +51,11 @@ public class Task implements Serializable {
 
     @ColumnInfo(name = "quantity")
     private String quantity;
-
-    public Task(String unitIn, String unit, String currentprice, String id, String brand, String productType, String name, String type, String thumbnail, String price, String description, String vendorId, String quantity) {
+    @ColumnInfo(name = "title")
+    private String title;
+    @ColumnInfo(name = "value")
+    private String value;
+    public Task(String unitIn, String unit, String currentprice, String id, String brand, String productType, String name, String type, String thumbnail, String price, String description, String vendorId, String quantity, String title,String value) {
         this.unitIn = unitIn;
         this.unit = unit;
         this.currentprice = currentprice;
@@ -66,9 +69,12 @@ public class Task implements Serializable {
         this.description = description;
         this.vendorId = vendorId;
         this.quantity = quantity;
+        this.title=title;
+        this.value=value;
+
     }
 
-    public Task(ProductModel product, String quantity, String unit, String unitIn, String currentprice, String price) {
+    public Task(ProductModel product, String quantity, String unit, String unitIn, String currentprice, String price, String titlegetValues, String valuesOfattr) {
         this.id = product.getId();
         this.brand = product.getBrand();
         this.productType = product.getProductType();
@@ -82,6 +88,8 @@ public class Task implements Serializable {
         this.unit = unit;
         this.unitIn = unitIn;
         this.currentprice = currentprice;
+        this.title=titlegetValues;
+        this.value=valuesOfattr;
     }
 
     public Task(ProductModel product, String quantity, String price) {
@@ -202,5 +210,21 @@ public class Task implements Serializable {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

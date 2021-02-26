@@ -38,7 +38,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:drawableEnd="@drawable/ic_minus"
-                android:drawableTint="@color/orange" />
+                android:drawableTint="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/txtQuan"
@@ -57,7 +57,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:drawableEnd="@drawable/ic_plus"
-                android:drawableTint="@color/orange" />
+                android:drawableTint="@color/colorPrimary" />
         </LinearLayout>
 
 
@@ -144,7 +144,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/_3sdp"
-                android:background="@color/orange"
+                android:background="@color/colorPrimary"
                 android:src="@drawable/ic_baseline_delete" />
 
 

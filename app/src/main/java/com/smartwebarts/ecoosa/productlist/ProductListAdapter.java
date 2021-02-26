@@ -73,8 +73,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
             if (list.get(position).getUnits()!=null && list.get(position).getUnits().size()>0)
             {
-                holder.currentprice.setText(list.get(position).getUnits().get(0).getBuingprice());
-                holder.price.setText(context.getString(R.string.currency) + list.get(position).getUnits().get(0).getCurrentprice());
+                holder.currentprice.setText(list.get(position).getUnits().get(0).getCurrentprice());
+                holder.price.setText(context.getString(R.string.currency) + list.get(position).getUnits().get(0).getBuingprice());
                 holder.price.setPaintFlags(holder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
             }
@@ -90,15 +90,15 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                     if (temp!=null && temp.size()>0) {
                         holder.strUnit[position] = temp.get(pos).getUnit();
                         holder.strUnitIn[position] = temp.get(pos).getUnitIn();
-                        holder.currentprice.setText(temp.get(pos).getBuingprice());
-                        holder.price.setText(temp.get(pos).getCurrentprice().trim());
+                        holder.currentprice.setText(temp.get(pos).getCurrentprice());
+                        holder.price.setText(temp.get(pos).getBuingprice().trim());
                         holder.price.setPaintFlags(holder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
                         try {
-                            int a = (int) Double.parseDouble("0"+temp.get(pos).getBuingprice().trim());
-                            int b = (int) Double.parseDouble("0"+temp.get(pos).getCurrentprice().trim());
-                            int c = (b-a);
-                            int d = (int) c*100/b;
+                            int a = (int) Double.parseDouble("0"+temp.get(pos).getCurrentprice().trim());
+                            int b = (int) Double.parseDouble("0"+temp.get(pos).getBuingprice().trim());
+                            int c = (a-b)*(-1);
+                            int d = (int) c*100/a;
                             String discount = "" + d;
                             holder.txt_discountOff.setText(discount+"% OFF");
                         } catch (Exception ignored) {
@@ -134,6 +134,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             public void onClick(View v) {
                 Intent intent = new Intent(context, ProductDetailActivity.class);
                 intent.putExtra(ProductDetailActivity.ID, list.get(position).getId());
+                intent.putExtra(ProductDetailActivity.LIST, new Gson().toJson(list));
                 context.startActivity(intent);
             }
         });
@@ -286,8 +287,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                     list.get(getAdapterPosition()).getUnits().get(txt_unit.getSelectedItemPosition()).getUnit(),
                     list.get(getAdapterPosition()).getUnits().get(txt_unit.getSelectedItemPosition()).getUnitIn(),
                     list.get(getAdapterPosition()).getUnits().get(txt_unit.getSelectedItemPosition()).getBuingprice(),
-                    ""+finalprice
-            );
+                    ""+finalprice,
+                    "", "");
             items.add(task);
             new SaveProductList(context,items).execute();
             Toolbar_Set.INSTANCE.getCartList((Activity) context);

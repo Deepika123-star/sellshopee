@@ -38,7 +38,7 @@ public class UnitListAdapter extends RecyclerView.Adapter<UnitListAdapter.MyView
 
         if (list!=null && list.get(position)!=null){
             holder.tvUnit.setText(list.get(position).getUnit() + list.get(position).getUnitIn());
-            holder.tvPrice.setText(context.getString(R.string.currency) + list.get(position).getBuingprice());
+            holder.tvPrice.setText(context.getString(R.string.currency) + list.get(position).getCurrentprice());
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

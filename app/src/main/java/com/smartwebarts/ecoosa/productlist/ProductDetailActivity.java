@@ -6,8 +6,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -24,27 +28,44 @@ import com.smartwebarts.ecoosa.database.Task;
 import com.smartwebarts.ecoosa.models.ProductDetailImagesModel;
 import com.smartwebarts.ecoosa.models.ProductDetailModel;
 import com.smartwebarts.ecoosa.models.ProductModel;
+import com.smartwebarts.ecoosa.models.Productbrand;
+import com.smartwebarts.ecoosa.models.SubCategoryModel;
 import com.smartwebarts.ecoosa.models.UnitModel;
+import com.smartwebarts.ecoosa.retrofit.AttributModel;
 import com.smartwebarts.ecoosa.retrofit.UtilMethods;
 import com.smartwebarts.ecoosa.retrofit.mCallBackResponse;
 import com.smartwebarts.ecoosa.utils.ApplicationConstants;
 import com.smartwebarts.ecoosa.utils.CustomSlider;
+import com.smartwebarts.ecoosa.utils.MyGlide;
 import com.smartwebarts.ecoosa.utils.Toolbar_Set;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class ProductDetailActivity extends AppCompatActivity implements BaseSliderView.OnSliderClickListener {
 
+    public static final String LIST = "list";
     private com.daimajia.slider.library.SliderLayout viewPager;
     private int currentPage = 0;
     private ArrayList<String> sliderImage= new ArrayList<String>();
     private ProductModel addToCartProductItem;
-    private TextView tvName, txt_vName, tvDescription2, tvPrice,tvPricen, tvCurrentPrice, tvDiscount, tvOffer;
+  private List<AttributModel>attributModelList;
+    private Productbrand productbrand;
+    private TextView brandName,tvName, txt_vName, tvDescription2, tvPrice,tvPricen, tvCurrentPrice, tvDiscount, tvOffer,color1;
     private CardView cvoffer;
-    private ImageView ivVeg;
+    private ImageView ivVeg,brandImages;
     public static final String ID = "id";
     private String pid;
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView,productImagesGrid,colorrecyclerView;
     private String unit="", unitIn="", currentPrice="0", buingPrice = "0", discount = "0";
-
+    private int id=0;
+    UnitAdapter unitAdapter;
+    List<ProductModel> list;
+/*for attribute*/
+ArrayList<String> titlearry=new ArrayList<String>();
+    ArrayList<String> valuearry=new ArrayList<String>();
+    Spinner title,value;
+    String titlegetValues,valuesOfattr ;
+    private boolean isFirstTime = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +75,10 @@ public class ProductDetailActivity extends AppCompatActivity implements BaseSlid
         viewPager = findViewById(R.id.viewPager);
         tvName = findViewById(R.id.txt_pName);
         txt_vName = findViewById(R.id.txt_vName);
+        brandName = findViewById(R.id.brandName);
+        brandImages = findViewById(R.id.brandImages);
+
+
 //        tvDescription = findViewById(R.id.txt_pInfo);
         tvDescription2 = findViewById(R.id.tvDescription);
         tvDiscount = findViewById(R.id.txt_discount);
@@ -64,9 +89,48 @@ public class ProductDetailActivity extends AppCompatActivity implements BaseSlid
         //tvOffer = (TextView) findViewById(R.id.tvoffer);
         //cvoffer = (CardView) findViewById(R.id.cvoffer);
         recyclerView = findViewById(R.id.recyclerView);
+        colorrecyclerView = findViewById(R.id.colorrecyclerView);
+
+
+        String temp = getIntent().getExtras().getString(LIST, "");
+
+        if (temp!=null && !temp.isEmpty()) {
+            Type type = new TypeToken<List<ProductModel>>(){}.getType();
+            list = new Gson().fromJson(temp, type);
+            setAdapter(list);
+            setItemList(list, isFirstTime);
+            isFirstTime = false;
+        }
+
+        productImagesGrid = findViewById(R.id.productImagesGrid);
         pid = getIntent().getExtras().getString(ID);
         getDetails();
+        attibute();
+        MyView();
     }
+
+    private void setItemList(List<ProductModel> list, boolean isSet) {
+        if (isSet) unitAdapter.setList(list);
+    }
+
+    private void MyView() {
+     /*   title.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                AttributModel itemOfTitle= (AttributModel) parent.getItemAtPosition(position);
+                titlegetValues=itemOfTitle.getTitle();
+            }
+        });
+
+        value.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                AttributModel itemOfTitle= (AttributModel) parent.getItemAtPosition(position);
+                valuesOfattr=itemOfTitle.getValue();
+            }
+        });*/
+    }
+
 
     private void setUpImageSlider(List<ProductDetailImagesModel> list) {
 
@@ -125,9 +189,8 @@ public class ProductDetailActivity extends AppCompatActivity implements BaseSlid
     public void addToBag(View view) {
 
         if (addToCartProductItem !=null){
-
             List<Task> items = new ArrayList<>();
-            Task task = new Task(addToCartProductItem, "1", unit, unitIn, currentPrice, currentPrice);
+            Task task = new Task(addToCartProductItem, "1", unit, unitIn, currentPrice, currentPrice,titlegetValues,valuesOfattr);
             items.add(task);
             new SaveProductList(this,items).execute();
             Toolbar_Set.INSTANCE.getCartList(this);
@@ -148,7 +211,6 @@ public class ProductDetailActivity extends AppCompatActivity implements BaseSlid
 
                          addToCartProductItem = new ProductModel(list.get(0));
                          tvName.setText(addToCartProductItem.getName().trim());
-
                          if (list.get(0)!=null && list.get(0).getVendorName()!=null) {
                              txt_vName.setText("("+list.get(0).getVendorName().trim()+")");
                          }
@@ -159,8 +221,8 @@ public class ProductDetailActivity extends AppCompatActivity implements BaseSlid
                          if (addToCartProductItem.getUnits()!=null && addToCartProductItem.getUnits().size()>0) {
                              unit = addToCartProductItem.getUnits().get(0).getUnit().trim();
                              unitIn = addToCartProductItem.getUnits().get(0).getUnitIn().trim();
-                             currentPrice = addToCartProductItem.getUnits().get(0).getBuingprice().trim();
-                             buingPrice = addToCartProductItem.getUnits().get(0).getCurrentprice().trim();
+                             currentPrice = addToCartProductItem.getUnits().get(0).getCurrentprice().trim();
+                             buingPrice = addToCartProductItem.getUnits().get(0).getBuingprice().trim();
                          }
 
                          try {
@@ -180,13 +242,15 @@ public class ProductDetailActivity extends AppCompatActivity implements BaseSlid
 
                          tvCurrentPrice.setText(getString(R.string.currency) + " " + currentPrice);
                          tvPrice.setText(  unit + unitIn);
+                        brandName.setText(list.get(0).getBrandName());
+                         MyGlide.with(ProductDetailActivity.this, ApplicationConstants.INSTANCE.BRAND_IMAGES + list.get(0).getBrandImage(),brandImages);
 
+                        // brandImages.setImageDrawable(getDrawable(R.drawable.ic_bag));
                          tvPricen.setText( getString(R.string.currency) + " " + buingPrice);
                          tvPricen.setPaintFlags(tvPricen.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
                          tvDiscount.setText(getString(R.string.currency) + discount);
 
-                         if (addToCartProductItem.getProductType().equalsIgnoreCase("Non-Vegetarian")) {
+                /*         if (addToCartProductItem.getProductType().equalsIgnoreCase("Non-Vegetarian")) {
                              ivVeg.setImageDrawable(getDrawable(R.drawable.nonveg));
                              ivVeg.setVisibility(View.VISIBLE);
                          } else if (addToCartProductItem.getProductType().equalsIgnoreCase("Vegetarian")){
@@ -194,9 +258,10 @@ public class ProductDetailActivity extends AppCompatActivity implements BaseSlid
                              ivVeg.setVisibility(View.VISIBLE);
                          } else {
                              ivVeg.setVisibility(View.GONE);
-                         }
+                         }*/
 
                          setRecycler(addToCartProductItem.getUnits());
+
                      }
                  }
 
@@ -226,6 +291,14 @@ public class ProductDetailActivity extends AppCompatActivity implements BaseSlid
          }
      }
 
+
+    private void setAdapter(List<ProductModel> myitem) {
+       unitAdapter=new UnitAdapter(ProductDetailActivity.this,myitem);
+        colorrecyclerView.setAdapter(unitAdapter);
+    }
+
+
+
     private void setRecycler(List<UnitModel> list) {
         UnitListAdapter adapter = new UnitListAdapter(this, list);
         recyclerView.setAdapter(adapter);
@@ -237,8 +310,8 @@ public class ProductDetailActivity extends AppCompatActivity implements BaseSlid
             UnitModel temp = addToCartProductItem.getUnits().get(position);
             unit = temp.getUnit();
             unitIn = temp.getUnitIn();
-            currentPrice = temp.getBuingprice();
-            buingPrice = temp.getCurrentprice();
+            currentPrice = temp.getCurrentprice();
+            buingPrice = temp.getBuingprice();
             tvCurrentPrice.setText(getString(R.string.currency) + " " + currentPrice);
             tvPricen.setText(getString(R.string.currency) + " " + buingPrice);
             tvPricen.setPaintFlags(tvPricen.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -266,4 +339,58 @@ public class ProductDetailActivity extends AppCompatActivity implements BaseSlid
     public void onSliderClick(BaseSliderView slider) {
 
     }
+    private void attibute() {
+        if (UtilMethods.INSTANCE.isNetworkAvialable(ProductDetailActivity.this)) {
+
+            UtilMethods.INSTANCE.attribut(ProductDetailActivity.this,pid, new mCallBackResponse() {
+                @Override
+                public void success(String from, String message) {
+                        /*Set Data In List View */
+                    Type type = new TypeToken<List<AttributModel>>(){}.getType();
+                    attributModelList = new Gson().fromJson(message, type);
+                    setRecycler1(attributModelList);
+                    /*Type type = new TypeToken<List<AttributModel>>(){}.getType();
+                    List<AttributModel> attr = new Gson().fromJson(message, type);
+                    Log.d("Attribute===========", "success: "+attr);
+*/
+                   /* showDialog(holder, position, list.get(position), couponList);*/
+                   /* ArrayList<String> attribut =new ArrayList<>();
+                    for (int i=0;i<attr.size();i++){
+                        attribut.add(attr.get(i).getTitle());
+                    }*/
+
+                   /* String abc=attr.get(0).getId();*/
+                  /*  Spinner_Adapter adapter = new Spinner_Adapter(ProductDetailActivity.this,attr);
+                    title.setAdapter(adapter);*/
+                   // ArrayList<String> attributvalu =new ArrayList<>();
+                  /*  for (int i=0;i<attr.size();i++){
+                        attributvalu.add(attr.get(i).getValue());
+                    }
+                    ValuesAdapter adapter2 = new ValuesAdapter(ProductDetailActivity.this,attr);
+                    value.setAdapter(adapter2);*/
+
+                 /*   ArrayAdapter<String> adaptervalue = new ArrayAdapter<String>(ProductDetailActivity.this,android.R.layout.simple_spinner_item, titlearry);
+                    value.setAdapter(adaptervalue);*/
+
+                }
+
+                @Override
+                public void fail(String from) {
+                  /*  new SweetAlertDialog(ProductDetailActivity.this)
+                            .setTitleText("No Attribute ")
+                            .setContentText("No Attribute available for this item")
+                            .show();*/
+                }
+            });
+        } else {
+            UtilMethods.INSTANCE.internetNotAvailableMessage(ProductDetailActivity.this);
+        }
+    }
+
+    private void setRecycler1(List<AttributModel> attributModelList) {
+        ColorAdapterForAttribut colorAdapterForAttribut=new ColorAdapterForAttribut(this,attributModelList);
+        productImagesGrid.setAdapter(colorAdapterForAttribut);
+
+    }
+
 }

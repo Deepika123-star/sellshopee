@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,6 +20,8 @@ import java.util.List;
 import com.smartwebarts.ecoosa.R;
 import com.smartwebarts.ecoosa.models.CategoryModel;
 import com.smartwebarts.ecoosa.models.ProductModel;
+import com.smartwebarts.ecoosa.models.SubCategoryModel;
+import com.smartwebarts.ecoosa.models.SubSubCategoryModel;
 import com.smartwebarts.ecoosa.retrofit.UtilMethods;
 import com.smartwebarts.ecoosa.retrofit.mCallBackResponse;
 import com.smartwebarts.ecoosa.utils.Toolbar_Set;
@@ -26,9 +29,9 @@ import com.smartwebarts.ecoosa.utils.Toolbar_Set;
 public class ProductListActivity extends AppCompatActivity {
 
     RecyclerView rvProductList, rvProductGrid;
-//    SubSubCategoryModel subSubCategory;
+   private SubSubCategoryModel subSubCategory;
     CategoryModel category;
-//    SubCategoryModel subCategory;
+   private SubCategoryModel subCategory;
     TextView tv_subsubCategory;
 
     @Override
@@ -41,18 +44,19 @@ public class ProductListActivity extends AppCompatActivity {
 
         tv_subsubCategory = findViewById(R.id.subsubCategory);
 
-//        subCategory = (SubCategoryModel) getIntent().getSerializableExtra("subCategory");
+        subCategory = (SubCategoryModel) getIntent().getSerializableExtra("subCategory");
         category = (CategoryModel) getIntent().getSerializableExtra("category");
-//        subSubCategory = (SubSubCategoryModel) getIntent().getSerializableExtra("subsubcategory");
+        subSubCategory = (SubSubCategoryModel) getIntent().getSerializableExtra("subsubcategory");
         tv_subsubCategory.setText(category.getName());
-
+        Intent intent=getIntent();
         Toolbar_Set.INSTANCE.setToolbar(this, category.getName());
         Toolbar_Set.INSTANCE.setBottomNav(this);
 
         if (UtilMethods.INSTANCE.isNetworkAvialable(this)) {
-            UtilMethods.INSTANCE.products(this, category.getId(),"",""/*subCategory.getId(), subSubCategory.getId()*/,new mCallBackResponse() {
+            UtilMethods.INSTANCE.products(this, category.getId(),subCategory.getId(), subSubCategory.getId(),new mCallBackResponse() {
                 @Override
                 public void success(String from, String message) {
+                    System.out.println("subsub id----"+subSubCategory.getId());
                     Type listType = new TypeToken<ArrayList<ProductModel>>(){}.getType();
                     List<ProductModel> list = new Gson().fromJson(message, listType);
                     setProduct(list);

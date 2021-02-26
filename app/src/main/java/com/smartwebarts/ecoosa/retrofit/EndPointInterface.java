@@ -249,4 +249,9 @@ public interface EndPointInterface {
                                   @Field("landmark") String landmark,
                                   @Field("pin_code") String pin_code);
 
+    /*For attribute  in Product*/
+    @GET("API/ProductAttr/{id}")
+    Call<List<AttributModel>>setAttribute(@Path("id")String id);
+
+
 }

@@ -74,8 +74,8 @@ public class ProductListGridAdapter extends RecyclerView.Adapter<ProductListGrid
 
             if (list.get(position).getUnits()!=null && list.get(position).getUnits().size()>0)
             {
-                holder.currentprice.setText(list.get(position).getUnits().get(0).getBuingprice());
-                holder.price.setText(context.getString(R.string.currency) + list.get(position).getUnits().get(0).getCurrentprice());
+                holder.currentprice.setText(list.get(position).getUnits().get(0).getCurrentprice());
+                holder.price.setText(context.getString(R.string.currency) + list.get(position).getUnits().get(0).getBuingprice());
                 holder.price.setPaintFlags(holder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             }
 
@@ -93,18 +93,17 @@ public class ProductListGridAdapter extends RecyclerView.Adapter<ProductListGrid
                     if (temp!=null && temp.size()>0) {
                         holder.strUnit[position] = temp.get(pos).getUnit();
                         holder.strUnitIn[position] = temp.get(pos).getUnitIn();
-                        holder.currentprice.setText(context.getString(R.string.currency) + temp.get(pos).getBuingprice());
-                        holder.price.setText(context.getString(R.string.currency) + temp.get(pos).getCurrentprice().trim());
+                        holder.currentprice.setText(context.getString(R.string.currency) + temp.get(pos).getCurrentprice());
+                        holder.price.setText(context.getString(R.string.currency) + temp.get(pos).getBuingprice().trim());
                         holder.price.setPaintFlags(holder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-
                         try {
-                            int a = (int) Double.parseDouble("0"+temp.get(pos).getBuingprice().trim());
-                            int b = (int) Double.parseDouble("0"+temp.get(pos).getCurrentprice().trim());
-                            int c = (b-a)*(-1);
-                            int d = (int) c*100/b;
+                            int a = (int) Double.parseDouble("0"+temp.get(pos).getCurrentprice().trim());
+                            int b = (int) Double.parseDouble("0"+temp.get(pos).getBuingprice().trim());
+                            int c = (a-b)*(-1);
+                            int d = (int) c*100/a;
                             String discount = "" + d;
-                            holder.txt_discountOff.setText(discount+"%");
+                            holder.txt_discountOff.setText(discount+"% OFF");
                         } catch (Exception ignored) {
                             holder.txt_discountOff.setText("NEW");
                         }
@@ -141,6 +140,7 @@ public class ProductListGridAdapter extends RecyclerView.Adapter<ProductListGrid
                 Intent intent = new Intent(context, ProductDetailActivity.class);
                 intent.putExtra(ProductDetailActivity.ID, list.get(position).getId());
                 context.startActivity(intent);
+
             }
         });
 
@@ -169,14 +169,12 @@ public class ProductListGridAdapter extends RecyclerView.Adapter<ProductListGrid
 
             prodImage = itemView.findViewById(R.id.prodImage);
             addToWishList = itemView.findViewById(R.id.addToWishList);
-
             txt_pName = itemView.findViewById(R.id.txt_pName);
             txt_pInfo = itemView.findViewById(R.id.txt_pInfo);
             txt_unit = itemView.findViewById(R.id.txt_current_price);
             currentprice = itemView.findViewById(R.id.currentprice);
             price = itemView.findViewById(R.id.txt_price);
             txt_discountOff = itemView.findViewById(R.id.txt_discountOff);
-
             rlQuan =  itemView.findViewById(R.id.rlQuan);
             ll_Add =  itemView.findViewById(R.id.ll_Add);
             ll_addQuan =  itemView.findViewById(R.id.ll_addQuan);
@@ -292,8 +290,8 @@ public class ProductListGridAdapter extends RecyclerView.Adapter<ProductListGrid
                     list.get(getAdapterPosition()).getUnits().get(txt_unit.getSelectedItemPosition()).getUnit(),
                     list.get(getAdapterPosition()).getUnits().get(txt_unit.getSelectedItemPosition()).getUnitIn(),
                     list.get(getAdapterPosition()).getUnits().get(txt_unit.getSelectedItemPosition()).getBuingprice(),
-                    ""+finalprice
-            );
+                    ""+finalprice,
+                   "","");
             items.add(task);
             new SaveProductList(context,items).execute();
             Toolbar_Set.INSTANCE.getCartList((Activity) context);

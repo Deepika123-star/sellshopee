@@ -111,7 +111,6 @@ public enum Toolbar_Set {
                 if (cartItemsCount != null) {
                     cartItemsCount.setText(""+size);
                 }
-
                 TextView cart_badge = activity.findViewById(R.id.cart_badge);
                 if (cart_badge !=null) {
                     cart_badge.setText(""+size);

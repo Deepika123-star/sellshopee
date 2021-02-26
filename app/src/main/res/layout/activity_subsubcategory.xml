@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".dashboard.ui.home.SubSubCategoryActivity">
+<include
+    android:id="@+id/toolbar"
+    layout="@layout/toolbar_back"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSubSubCategories"
+        android:layout_width="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_below="@+id/toolbar"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>

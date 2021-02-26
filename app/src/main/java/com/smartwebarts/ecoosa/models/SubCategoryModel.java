@@ -31,6 +31,17 @@ public class SubCategoryModel implements Serializable {
     @SerializedName("value")
     @Expose
     private String value;
+    @SerializedName("product_id")
+    @Expose
+    private String productId;
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
 
     public String getId() {
         return id;

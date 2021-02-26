@@ -10,6 +10,7 @@ public enum ApplicationConstants {
     public String API_URL = SITE_URL + "API/";
     public String CATEGORY_IMAGES = SITE_URL + "assets/img/cat_img/";
     public String PRODUCT_IMAGES = SITE_URL + "assets/img/product_img/";
+    public String BRAND_IMAGES = SITE_URL + "assets/img/cat_img/";
     public String OFFER_IMAGES = SITE_URL + "assets/img/offer_img/";
     public String TERMS_CONDITION = SITE_URL + "apppages/terms.php";
     public String ABOUT_US = SITE_URL + "apppages/aboutus.php";

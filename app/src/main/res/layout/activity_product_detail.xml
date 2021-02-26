@@ -20,13 +20,20 @@
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:layout_height="wrap_content">
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
             <com.daimajia.slider.library.SliderLayout
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="380dp"
-                android:layout_margin="5dp"/>
+                android:layout_margin="5dp">
 
+
+            </com.daimajia.slider.library.SliderLayout>
+
+
+</RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -237,11 +244,94 @@
                                             android:textStyle="bold|normal" />
 
                                     </LinearLayout>
+                                    <androidx.recyclerview.widget.RecyclerView
+                                        android:id="@+id/colorrecyclerView"
+                                        android:layout_width="match_parent"
+                                        android:layout_below="@+id/ll_prices"
+                                        android:layout_height="wrap_content"
+                                        android:minHeight="50dp"
+                                        android:background="#ACD"
+                                        tools:listitem="@layout/unit_item_layout"
+                                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                        android:orientation="horizontal"
+                                        android:layout_margin="@dimen/_5sdp"/>
                                 </RelativeLayout>
                             </LinearLayout>
 
 
                         </com.google.android.material.card.MaterialCardView>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_margin="10dp"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:text="Brand Name "
+                                android:layout_weight="1"
+                                android:layout_marginLeft="10dp"
+                                android:fontFamily="@font/bold"
+                                android:textStyle="bold|normal"
+                                android:layout_height="wrap_content"/>
+                            <TextView
+                                android:id="@+id/brandName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/bold"
+                                android:textStyle="bold|normal"
+                                android:layout_weight="1"
+                                android:textSize="16dp"
+                                android:text="Brand Name"
+                                android:layout_marginRight="5dp"
+                                android:textAlignment="textEnd"
+                                android:textColor="#E10909" />
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:text="Brand "
+                                android:layout_weight="1.5"
+                                android:layout_marginLeft="20dp"
+                                android:fontFamily="@font/bold"
+                                android:textStyle="bold|normal"
+                                android:layout_height="wrap_content"/>
+                            <ImageView
+                                android:id="@+id/brandImages"
+                                android:layout_width="70dp"
+                                android:background="#E4E8E5"
+                                android:layout_weight=".5"
+                                android:scaleType="centerCrop"
+                                android:layout_alignBottom="@+id/viewPager"
+                                android:layout_height="70dp"/>
+                            <!--<TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/bold"
+                                android:padding="5dp"
+                                android:textStyle="bold|normal"
+
+                                android:textSize="16dp"
+                                android:text="Brand Name"
+                                android:textAlignment="center"
+                                android:textColor="#E10909" />-->
+
+                        </LinearLayout>
+     <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/productImagesGrid"
+    android:layout_width="match_parent"
+    tools:listitem="@layout/unit_color_item"
+    android:layout_margin="10dp"
+    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+    android:layout_height="wrap_content"/>
+
+
+
                     </LinearLayout>
 
 <!--                    <TextView-->
@@ -280,7 +370,11 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
+                   android:layout_marginLeft="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp"
                     android:background="@android:color/black"/>
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
@@ -466,6 +560,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:visibility="gone"
                     android:layout_margin="10dp">
                     <ImageView
                         android:id="@+id/daysreturn"

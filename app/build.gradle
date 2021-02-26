@@ -13,21 +13,19 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
     defaultConfig {
-        applicationId "com.smartwebarts.sellshopee"
+        applicationId "com.sellshopee.sellshopee"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 5
+        versionName "1.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
     signingConfigs {
         config {
             keyAlias 'guestbazar'
@@ -60,7 +58,6 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
     implementation 'com.daimajia.slider:library:1.1.5@aar'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.nineoldandroids:library:2.4.0'
@@ -122,4 +119,6 @@ dependencies {
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.1.+'
     //for payment gatway
     implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
+    /*firebase account
+    * contactsellshopee@gmail.com*/
 }

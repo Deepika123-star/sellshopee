@@ -151,12 +151,12 @@ public class PayUMoneyActivity extends AppCompatActivity {
                     Toast.makeText(activity, "Oh no! " + error, Toast.LENGTH_SHORT).show();
                 }
 
-                @Override
+             /*   @Override
                 public void onReceivedSslError(WebView view,
                                                SslErrorHandler handler, SslError error) {
                     Toast.makeText(activity, "SSL Error! " + error, Toast.LENGTH_SHORT).show();
                     handler.proceed();
-                }
+                }*/
 
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {

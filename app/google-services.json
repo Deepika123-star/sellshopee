@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "242265743164",
-    "project_id": "sellshopee-f94ab",
-    "storage_bucket": "sellshopee-f94ab.appspot.com"
+    "project_number": "738292009157",
+    "project_id": "sellshopee-7b366",
+    "storage_bucket": "sellshopee-7b366.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:242265743164:android:45b44cead293aa693e0839",
+        "mobilesdk_app_id": "1:738292009157:android:5d6b24154193adc4bec8ac",
         "android_client_info": {
-          "package_name": "com.smartwebarts.sellshopee"
+          "package_name": "com.sellshopee.sellshopee"
         }
       },
       "oauth_client": [
         {
-          "client_id": "242265743164-ejgfeo6bp8067abjvq6vt0rutjrteefv.apps.googleusercontent.com",
+          "client_id": "738292009157-1qjkf0o4cu0cpg2qveit9r9e06t8pii7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.smartwebarts.sellshopee",
+            "package_name": "com.sellshopee.sellshopee",
             "certificate_hash": "deabadeca4c5ed881877265d410781be50457746"
           }
         },
         {
-          "client_id": "242265743164-cmoqvj74h74lset4nrj9lluecb2j8e2j.apps.googleusercontent.com",
+          "client_id": "738292009157-p9sbqpkrua5legvpq0mgfqhu09ama7t6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDgD8i_BveKV1oEmc4zoqyX3QfqtZ-7IQY"
+          "current_key": "AIzaSyAl-aGthtoliFbgH3vHToJnnaG8ypkktc0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "242265743164-cmoqvj74h74lset4nrj9lluecb2j8e2j.apps.googleusercontent.com",
+              "client_id": "738292009157-p9sbqpkrua5legvpq0mgfqhu09ama7t6.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
