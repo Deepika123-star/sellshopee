@@ -21,6 +21,17 @@ public class UnitModel {
 //    @Expose
 //    private String temp;
 
+    @SerializedName("min_unit")
+    @Expose
+    private int minUnit;
+
+    public int getMinUnit() {
+        return minUnit;
+    }
+
+    public void setMinUnit(int minUnit) {
+        this.minUnit = minUnit;
+    }
 
     public String getCurrentprice() {
         return currentprice;

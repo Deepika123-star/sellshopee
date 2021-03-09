@@ -252,6 +252,8 @@ public interface EndPointInterface {
     /*For attribute  in Product*/
     @GET("API/ProductAttr/{id}")
     Call<List<AttributModel>>setAttribute(@Path("id")String id);
-
+/*for variant*/
+@GET("API/api_varient_specificproduct/{id}")
+Call<List<VariantModel>>variant(@Path("id")String id);
 
 }

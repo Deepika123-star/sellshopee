@@ -2011,5 +2011,51 @@ public enum UtilMethods {
             dialog.dismiss();
         }
     }
+/*for variant*/
+public void variant(Context context, String id, final mCallBackResponse callBackResponse) {
+
+    final Dialog dialog = new Dialog(context);
+    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+    dialog.setContentView(R.layout.default_progress_dialog);
+    Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+    ProgressBar progressBar = (ProgressBar)dialog.findViewById(R.id.progress);
+    DoubleBounce doubleBounce = new DoubleBounce();
+    progressBar.setIndeterminateDrawable(doubleBounce);
+    dialog.show();
+
+    try {
+        EndPointInterface git = APIClient.getClient().create(EndPointInterface.class);
+        Call<List<VariantModel>> call = git.variant(id);
+        call.enqueue(new Callback<List<VariantModel>>() {
+            @Override
+            public void onResponse(@NotNull Call<List<VariantModel>> call, @NotNull Response<List<VariantModel>> response) {
+                dialog.dismiss();
+                String strResponse = new Gson().toJson(response.body());
+                Log.e("strResponseDeepika==",strResponse);
+                if (response.body()!=null) {
+                    if (response.body().size()>0 ) {
+                        callBackResponse.success("", strResponse);
+                    }
+                    else {
+                        callBackResponse.fail("No Data");
+                    }
+                } else {
+                    callBackResponse.fail("No Data found..?");
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<List<VariantModel>> call, @NotNull Throwable t) {
+                callBackResponse.fail(t.getMessage());
+                dialog.dismiss();
+            }
+        });
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        callBackResponse.fail(e.getMessage());
+        dialog.dismiss();
+    }
+}
 
 }

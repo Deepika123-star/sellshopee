@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,7 +31,8 @@ public class WishlistGridAdapter extends RecyclerView.Adapter<WishlistGridAdapte
 
     private Context context;
     private List<ProductModel> list;
-
+   // public static final int minValue = 5;
+    int minValue;
     public WishlistGridAdapter(Context context, List<ProductModel> list) {
         this.context = context;
         this.list = list;
@@ -53,6 +55,7 @@ public class WishlistGridAdapter extends RecyclerView.Adapter<WishlistGridAdapte
             holder.txt_pInfo.setText(list.get(position).getDescription().trim());
             holder.txt_unit.setText(list.get(position).getUnit().trim() + list.get(position).getUnitIn().trim());
             holder.currentprice.setText(context.getString(R.string.currency) + " " + list.get(position).getCurrentprice().trim());
+            minValue=list.get(position).getUnits().get(0).getMinUnit();
 //            holder.price.setText(context.getString(R.string.currency) + " " + list.get(position).getPrice().trim());
 //            holder.price.setPaintFlags(holder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             holder.addToWishList.setImageDrawable(
@@ -95,7 +98,7 @@ public class WishlistGridAdapter extends RecyclerView.Adapter<WishlistGridAdapte
         RelativeLayout rlQuan;
         LinearLayout ll_addQuan, ll_Add;
         TextView plus, minus;
-        int minteger = 0;
+        int minteger =minValue;
 
 
         public MyViewHolder(@NonNull View itemView) {
@@ -122,8 +125,8 @@ public class WishlistGridAdapter extends RecyclerView.Adapter<WishlistGridAdapte
                 public void onClick(View v) {
                     ll_Add.setVisibility(View.GONE);
                     ll_addQuan.setVisibility(View.VISIBLE);
-                    txtQuan.setText("1");
-                    MyViewHolder.this.addToBag("1");
+                    txtQuan.setText(""+minValue);
+                    MyViewHolder.this.addToBag(""+minValue);
                 }
             });
 
@@ -154,15 +157,17 @@ public class WishlistGridAdapter extends RecyclerView.Adapter<WishlistGridAdapte
         }
 
         public void decreaseInteger() {
-            if (minteger == 1) {
-                minteger = 1;
+            if (minteger ==minValue) {
+                minteger = minValue;
                 display(minteger);
                 ll_addQuan.setVisibility(View.GONE);
                 ll_Add.setVisibility(View.VISIBLE);
-            } else {
+            } else if (minteger<=5){
+                Toast.makeText(context, "You Can not Order less then 5 pcs..", Toast.LENGTH_SHORT).show();
+            }
+            else {
                 minteger = minteger - 1;
                 display(minteger);
-
             }
         }
 

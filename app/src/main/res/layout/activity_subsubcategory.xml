@@ -8,11 +8,21 @@
 <include
     android:id="@+id/toolbar"
     layout="@layout/toolbar_back"/>
+    <TextView
+        android:id="@+id/abc"
+        android:layout_below="@+id/toolbar"
+        android:layout_width="wrap_content"
+        android:padding="10dp"
+        android:textSize="16dp"
+        android:textStyle="bold|normal"
+        android:textColor="@color/colorPrimary"
+        android:text="Shop now "
+        android:layout_height="wrap_content"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSubSubCategories"
         android:layout_width="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@+id/abc"
         android:layout_height="match_parent"/>
 
 </RelativeLayout>

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,6 +34,8 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.MyView
 
     private Context context;
     private List<ProductModel> list;
+   // public static final int minValue = 5;
+   int minValue;
 
     public WishlistAdapter(Context context, List<ProductModel> list) {
         this.context = context;
@@ -58,6 +61,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.MyView
             holder.currentprice.setText( list.get(position).getCurrentprice().trim());
 //            holder.price.setText( list.get(position).getPrice().trim());
 //            holder.price.setPaintFlags(holder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+          minValue=list.get(position).getUnits().get(0).getMinUnit();
             holder.addToWishList.setImageDrawable(
                     context.getDrawable(list.get(position).isWishlist()?
                             R.drawable.ic_heart_red:
@@ -98,7 +102,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.MyView
         RelativeLayout rlQuan;
         LinearLayout ll_addQuan, ll_Add;
         TextView plus, minus;
-        int minteger = 0;
+        int minteger = minValue;
 
 
         public MyViewHolder(@NonNull View itemView) {
@@ -126,8 +130,8 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.MyView
                 public void onClick(View v) {
                     ll_Add.setVisibility(View.GONE);
                     ll_addQuan.setVisibility(View.VISIBLE);
-                    txtQuan.setText("1");
-                    MyViewHolder.this.addToBag("1");
+                    txtQuan.setText(""+minteger);
+                    MyViewHolder.this.addToBag(""+minteger);
                 }
             });
 
@@ -157,15 +161,17 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.MyView
         }
 
         public void decreaseInteger() {
-            if (minteger == 1) {
-                minteger = 1;
+            if (minteger == minValue) {
+                minteger = minValue;
                 display(minteger);
                 ll_addQuan.setVisibility(View.GONE);
                 ll_Add.setVisibility(View.VISIBLE);
-            } else {
+            }else if (minteger<=minValue){
+                Toast.makeText(context, "You Can not Order less then 5 pcs..", Toast.LENGTH_SHORT).show();
+            }
+            else {
                 minteger = minteger - 1;
                 display(minteger);
-
             }
         }
 

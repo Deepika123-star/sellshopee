@@ -244,17 +244,7 @@
                                             android:textStyle="bold|normal" />
 
                                     </LinearLayout>
-                                    <androidx.recyclerview.widget.RecyclerView
-                                        android:id="@+id/colorrecyclerView"
-                                        android:layout_width="match_parent"
-                                        android:layout_below="@+id/ll_prices"
-                                        android:layout_height="wrap_content"
-                                        android:minHeight="50dp"
-                                        android:background="#ACD"
-                                        tools:listitem="@layout/unit_item_layout"
-                                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                                        android:orientation="horizontal"
-                                        android:layout_margin="@dimen/_5sdp"/>
+
                                 </RelativeLayout>
                             </LinearLayout>
 
@@ -330,8 +320,6 @@
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
     android:layout_height="wrap_content"/>
 
-
-
                     </LinearLayout>
 
 <!--                    <TextView-->
@@ -389,6 +377,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:background="@android:color/black"/>
+
+                <TextView
+                    android:id="@+id/tev_name"
+                    android:layout_below="@+id/ll_prices"
+                    android:layout_width="match_parent"
+                    android:text="You May  Also Like"
+                    android:padding="10dp"
+                    android:visibility="gone"
+                    android:textAllCaps="true"
+                    android:fontFamily="@font/bold"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_height="wrap_content"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/colorrecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_below="@+id/tev_name"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/variants"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:layout_margin="@dimen/_5sdp"/>
 
             </LinearLayout>
 

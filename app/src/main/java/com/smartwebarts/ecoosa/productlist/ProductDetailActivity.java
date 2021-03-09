@@ -2,6 +2,7 @@ package com.smartwebarts.ecoosa.productlist;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Paint;
@@ -33,6 +34,7 @@ import com.smartwebarts.ecoosa.models.SubCategoryModel;
 import com.smartwebarts.ecoosa.models.UnitModel;
 import com.smartwebarts.ecoosa.retrofit.AttributModel;
 import com.smartwebarts.ecoosa.retrofit.UtilMethods;
+import com.smartwebarts.ecoosa.retrofit.VariantModel;
 import com.smartwebarts.ecoosa.retrofit.mCallBackResponse;
 import com.smartwebarts.ecoosa.utils.ApplicationConstants;
 import com.smartwebarts.ecoosa.utils.CustomSlider;
@@ -42,13 +44,12 @@ import com.smartwebarts.ecoosa.utils.Toolbar_Set;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class ProductDetailActivity extends AppCompatActivity implements BaseSliderView.OnSliderClickListener {
-
     public static final String LIST = "list";
     private com.daimajia.slider.library.SliderLayout viewPager;
     private int currentPage = 0;
     private ArrayList<String> sliderImage= new ArrayList<String>();
     private ProductModel addToCartProductItem;
-  private List<AttributModel>attributModelList;
+    private List<AttributModel>attributModelList;
     private Productbrand productbrand;
     private TextView brandName,tvName, txt_vName, tvDescription2, tvPrice,tvPricen, tvCurrentPrice, tvDiscount, tvOffer,color1;
     private CardView cvoffer;
@@ -56,10 +57,11 @@ public class ProductDetailActivity extends AppCompatActivity implements BaseSlid
     public static final String ID = "id";
     private String pid;
     private RecyclerView recyclerView,productImagesGrid,colorrecyclerView;
-    private String unit="", unitIn="", currentPrice="0", buingPrice = "0", discount = "0";
+    private String unit="", unitIn="", currentPrice="0", buingPrice = "0", discount = "0", minUnit = "1";
     private int id=0;
-    UnitAdapter unitAdapter;
     List<ProductModel> list;
+    /*for variant*/
+    List<VariantModel>variantModelList;
 /*for attribute*/
 ArrayList<String> titlearry=new ArrayList<String>();
     ArrayList<String> valuearry=new ArrayList<String>();
@@ -97,9 +99,9 @@ ArrayList<String> titlearry=new ArrayList<String>();
         if (temp!=null && !temp.isEmpty()) {
             Type type = new TypeToken<List<ProductModel>>(){}.getType();
             list = new Gson().fromJson(temp, type);
-            setAdapter(list);
-            setItemList(list, isFirstTime);
-            isFirstTime = false;
+           // setAdapter(list);
+           /* setItemList(list, isFirstTime);
+            isFirstTime = false;*/
         }
 
         productImagesGrid = findViewById(R.id.productImagesGrid);
@@ -107,12 +109,70 @@ ArrayList<String> titlearry=new ArrayList<String>();
         getDetails();
         attibute();
         MyView();
+        //variant();
     }
 
-    private void setItemList(List<ProductModel> list, boolean isSet) {
-        if (isSet) unitAdapter.setList(list);
+    private void variant() {
+        if (UtilMethods.INSTANCE.isNetworkAvialable(ProductDetailActivity.this)) {
+
+            UtilMethods.INSTANCE.variant(ProductDetailActivity.this,pid, new mCallBackResponse() {
+                @Override
+                public void success(String from, String message) {
+                    /*Set Data In List View */
+                    Type type = new TypeToken<List<VariantModel>>(){}.getType();
+                    variantModelList = new Gson().fromJson(message, type);
+                    Log.d("type==Deepika ", "success: "+message);
+                    setDataInAdapter(variantModelList);
+
+                    /*Type type = new TypeToken<List<AttributModel>>(){}.getType();
+                    List<AttributModel> attr = new Gson().fromJson(message, type);
+                    Log.d("Attribute===========", "success: "+attr);
+*/
+                    /* showDialog(holder, position, list.get(position), couponList);*/
+                   /* ArrayList<String> attribut =new ArrayList<>();
+                    for (int i=0;i<attr.size();i++){
+                        attribut.add(attr.get(i).getTitle());
+                    }*/
+
+                    /* String abc=attr.get(0).getId();*/
+                  /*  Spinner_Adapter adapter = new Spinner_Adapter(ProductDetailActivity.this,attr);
+                    title.setAdapter(adapter);*/
+                    // ArrayList<String> attributvalu =new ArrayList<>();
+                  /*  for (int i=0;i<attr.size();i++){
+                        attributvalu.add(attr.get(i).getValue());
+                    }
+                    ValuesAdapter adapter2 = new ValuesAdapter(ProductDetailActivity.this,attr);
+                    value.setAdapter(adapter2);*/
+
+                 /*   ArrayAdapter<String> adaptervalue = new ArrayAdapter<String>(ProductDetailActivity.this,android.R.layout.simple_spinner_item, titlearry);
+                    value.setAdapter(adaptervalue);*/
+
+                }
+
+                @Override
+                public void fail(String from) {
+                  /*  new SweetAlertDialog(ProductDetailActivity.this)
+                            .setTitleText("No Attribute ")
+                            .setContentText("No Attribute available for this item")
+                            .show();*/
+                }
+            });
+        } else {
+            UtilMethods.INSTANCE.internetNotAvailableMessage(ProductDetailActivity.this);
+        }
+
     }
 
+    private void setDataInAdapter(List<VariantModel> variantModelList) {
+        VariantAdapter variantAdapter=new VariantAdapter(ProductDetailActivity.this,variantModelList);
+       // colorrecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        colorrecyclerView.setAdapter(variantAdapter);
+    }
+
+    /*  private void setItemList(List<ProductModel> list, boolean isSet) {
+          if (isSet) unitAdapter.setList(list);
+      }
+  */
     private void MyView() {
      /*   title.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -190,7 +250,7 @@ ArrayList<String> titlearry=new ArrayList<String>();
 
         if (addToCartProductItem !=null){
             List<Task> items = new ArrayList<>();
-            Task task = new Task(addToCartProductItem, "1", unit, unitIn, currentPrice, currentPrice,titlegetValues,valuesOfattr);
+            Task task = new Task(addToCartProductItem, minUnit, unit, unitIn, currentPrice, currentPrice,titlegetValues,valuesOfattr);
             items.add(task);
             new SaveProductList(this,items).execute();
             Toolbar_Set.INSTANCE.getCartList(this);
@@ -221,8 +281,11 @@ ArrayList<String> titlearry=new ArrayList<String>();
                          if (addToCartProductItem.getUnits()!=null && addToCartProductItem.getUnits().size()>0) {
                              unit = addToCartProductItem.getUnits().get(0).getUnit().trim();
                              unitIn = addToCartProductItem.getUnits().get(0).getUnitIn().trim();
+                             minUnit = ""+addToCartProductItem.getUnits().get(0).getMinUnit();
                              currentPrice = addToCartProductItem.getUnits().get(0).getCurrentprice().trim();
                              buingPrice = addToCartProductItem.getUnits().get(0).getBuingprice().trim();
+                             int temp2=list.get(0).getUnits().get(0).getMinUnit();
+                             Log.d("MinUnitfor===", "success: "+temp2);
                          }
 
                          try {
@@ -286,16 +349,20 @@ ArrayList<String> titlearry=new ArrayList<String>();
 
                  }
              });
+             variant();
          } else {
              UtilMethods.INSTANCE.internetNotAvailableMessage(this);
          }
      }
 
+/*
 
     private void setAdapter(List<ProductModel> myitem) {
-       unitAdapter=new UnitAdapter(ProductDetailActivity.this,myitem);
+        myitem.remove(ID);
+       unitAdapter=new ProductListAdapter(ProductDetailActivity.this,myitem);
         colorrecyclerView.setAdapter(unitAdapter);
     }
+*/
 
 
 
@@ -310,12 +377,14 @@ ArrayList<String> titlearry=new ArrayList<String>();
             UnitModel temp = addToCartProductItem.getUnits().get(position);
             unit = temp.getUnit();
             unitIn = temp.getUnitIn();
+            minUnit = ""+temp.getMinUnit();
             currentPrice = temp.getCurrentprice();
             buingPrice = temp.getBuingprice();
             tvCurrentPrice.setText(getString(R.string.currency) + " " + currentPrice);
             tvPricen.setText(getString(R.string.currency) + " " + buingPrice);
             tvPricen.setPaintFlags(tvPricen.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             tvPrice.setText(  unit + unitIn);
+
 
             try {
                 int a = (int) Double.parseDouble("0"+currentPrice);

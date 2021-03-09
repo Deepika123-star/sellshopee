@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +65,7 @@ import com.smartwebarts.ecoosa.retrofit.mCallBackResponse;
 import com.smartwebarts.ecoosa.shared_preference.AppSharedPreferences;
 import com.smartwebarts.ecoosa.shared_preference.LoginData;
 import com.smartwebarts.ecoosa.shared_preference.SharedLinkPrefs;
+import com.smartwebarts.ecoosa.utils.ApplicationConstants;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -77,6 +79,7 @@ public class SignInActivity extends AppCompatActivity {
     private CallbackManager callbackManager;
     private LoginButton loginButton;
     private TextView tvMobile, tvPassword;
+    CheckBox check1terms;
 
     private String accessToken;
     private String Uid;
@@ -104,6 +107,8 @@ public class SignInActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
         tvMobile = findViewById(R.id.mobile);
         tvPassword = findViewById(R.id.password);
+        check1terms = findViewById(R.id.check1terms);
+
 
         loginButton.setReadPermissions(permissionNeeds);
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -196,8 +201,18 @@ public class SignInActivity extends AppCompatActivity {
             tvMobile.setError("Password Requied");
             return;
         }
+        if (check1terms.isChecked()){
+            requestlogin(tvMobile.getText().toString().trim(), tvPassword.getText().toString().trim());
 
-        requestlogin(tvMobile.getText().toString().trim(), tvPassword.getText().toString().trim());
+            return;
+
+
+        }
+        else {
+            Toast.makeText(this, "Please Accept Trams Condition...", Toast.LENGTH_SHORT).show();
+        }
+
+
 
     }
 
@@ -463,5 +478,14 @@ public class SignInActivity extends AppCompatActivity {
                         Log.e(TAG, "getDynamicLink:onFailure", e);
                     }
                 });
+    }
+
+    public void tarms(View view) {
+        openUrl(ApplicationConstants.INSTANCE.TERMS_CONDITION);
+    }
+
+    public  void openUrl(String url) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(browserIntent);
     }
 }

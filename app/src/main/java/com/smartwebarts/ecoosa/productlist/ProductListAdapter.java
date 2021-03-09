@@ -44,6 +44,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     private Context context;
     private List<ProductModel> list;
+   // public static final int minValue = 5;
+  // int minValue;
 
     public ProductListAdapter(Context context, List<ProductModel> list) {
         this.context = context;
@@ -76,7 +78,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 holder.currentprice.setText(list.get(position).getUnits().get(0).getCurrentprice());
                 holder.price.setText(context.getString(R.string.currency) + list.get(position).getUnits().get(0).getBuingprice());
                 holder.price.setPaintFlags(holder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
+                holder.minValue = list.get(position).getUnits().get(0).getMinUnit();
+                holder.minteger = holder.minValue;
             }
 
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, units);
@@ -86,14 +89,13 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                     List<UnitModel> temp = list.get(position).getUnits();
-
                     if (temp!=null && temp.size()>0) {
                         holder.strUnit[position] = temp.get(pos).getUnit();
                         holder.strUnitIn[position] = temp.get(pos).getUnitIn();
                         holder.currentprice.setText(temp.get(pos).getCurrentprice());
                         holder.price.setText(temp.get(pos).getBuingprice().trim());
-                        holder.price.setPaintFlags(holder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
+                        holder.price.setPaintFlags(holder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                         try {
                             int a = (int) Double.parseDouble("0"+temp.get(pos).getCurrentprice().trim());
                             int b = (int) Double.parseDouble("0"+temp.get(pos).getBuingprice().trim());
@@ -146,6 +148,11 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         return list.size();
     }
 
+    public void setList(List<ProductModel> list) {
+        this.list = list;
+        notifyDataSetChanged();
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView prodImage;
@@ -155,7 +162,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         RelativeLayout rlQuan;
         LinearLayout ll_addQuan, ll_Add;
         TextView plus, minus;
-        int minteger = 0;
+
+        int minteger, minValue;
         String[] strUnit = new String[list.size()];
         String[] strUnitIn = new String[list.size()];
 
@@ -227,8 +235,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 public void onClick(View v) {
                     ll_Add.setVisibility(View.GONE);
                     ll_addQuan.setVisibility(View.VISIBLE);
-                    txtQuan.setText("1");
-                    MyViewHolder.this.addToBag("1");
+                    txtQuan.setText("" + minteger);
+                    MyViewHolder.this.addToBag("" + minteger);
                 }
             });
 
@@ -237,9 +245,9 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 public void onClick(View v) {
                     MyViewHolder.this.increaseInteger();
 
-                    if (Float.parseFloat(txtQuan.getText().toString()) == 1) {
-
-                    } else if (Float.parseFloat(txtQuan.getText().toString()) > 1) {
+                    if (Float.parseFloat(txtQuan.getText().toString()) == minteger) {
+                        minus.setOnClickListener(v1 -> ProductListAdapter.MyViewHolder.this.decreaseInteger());
+                    } else if (Float.parseFloat(txtQuan.getText().toString()) > minteger) {
                         minus.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v1) {
@@ -251,23 +259,22 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             });
         }
 
-
         public void increaseInteger() {
             minteger = minteger + 1;
             display(minteger);
         }
-
         public void decreaseInteger() {
-            if (minteger == 1) {
-                minteger = 1;
+            if (minteger == minValue) {
+                minteger = minValue;
                 display(minteger);
                 ll_addQuan.setVisibility(View.GONE);
                 ll_Add.setVisibility(View.VISIBLE);
-            } else {
+            }
+                else {
                 minteger = minteger - 1;
                 display(minteger);
-
             }
+
         }
 
         private void display(Integer number) {
@@ -277,7 +284,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
         public void addToBag(String quantity) {
 
-            int price = Integer.parseInt("0"+list.get(getAdapterPosition()).getUnits().get(txt_unit.getSelectedItemPosition()).getBuingprice().trim());
+            int price = Integer.parseInt("0"+list.get(getAdapterPosition()).getUnits().get(txt_unit.getSelectedItemPosition()).getCurrentprice().trim());
             int qty = Integer.parseInt("0"+quantity.trim());
             int finalprice = price*qty;
 
@@ -286,7 +293,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                     quantity,
                     list.get(getAdapterPosition()).getUnits().get(txt_unit.getSelectedItemPosition()).getUnit(),
                     list.get(getAdapterPosition()).getUnits().get(txt_unit.getSelectedItemPosition()).getUnitIn(),
-                    list.get(getAdapterPosition()).getUnits().get(txt_unit.getSelectedItemPosition()).getBuingprice(),
+                    list.get(getAdapterPosition()).getUnits().get(txt_unit.getSelectedItemPosition()).getCurrentprice(),
                     ""+finalprice,
                     "", "");
             items.add(task);

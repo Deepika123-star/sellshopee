@@ -108,8 +108,8 @@ public class CartActivity extends AppCompatActivity {
                 double sum = 0.00;
 
                 for (Task task: tasks) {
-                    double price = Double.parseDouble("0"+(task.getCurrentprice()==null?"":task.getCurrentprice()));
-                    double qty = Double.parseDouble("0"+task.getQuantity());
+                    int price = (int) Double.parseDouble("0"+(task.getCurrentprice()==null?"":task.getCurrentprice().replaceAll("-", "")));
+                    int qty = (int) Double.parseDouble("0"+task.getQuantity().replaceAll("-", ""));
                     double total = price*qty;
 
                     if (map != null && map.get(task.getId())!=null) {

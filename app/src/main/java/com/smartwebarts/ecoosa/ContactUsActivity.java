@@ -26,7 +26,7 @@ public class ContactUsActivity extends AppCompatActivity {
 
     public void facebook(View view) {
        Toast.makeText(this, "Facebook", Toast.LENGTH_SHORT).show();
-        //openUrl(ApplicationConstants.INSTANCE.FACEBOOK);
+        openUrl(ApplicationConstants.INSTANCE.FACEBOOK);
     }
 
     public void instagram(View view) {

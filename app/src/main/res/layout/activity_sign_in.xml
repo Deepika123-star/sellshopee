@@ -116,6 +116,24 @@
                     android:text="Forgot Password?"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="12sp" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                   >
+                    <CheckBox
+                        android:id="@+id/check1terms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:checked="false"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="12sp" />
+                    <TextView
+                       android:onClick="tarms"
+                        android:text="@string/terms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
 
 
                 <com.google.android.material.card.MaterialCardView
@@ -132,7 +150,7 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="30dp"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/button_background"
                     android:onClick="loginWithMobile"

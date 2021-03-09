@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
 import com.smartwebarts.ecoosa.models.ProductModel;
+import com.smartwebarts.ecoosa.retrofit.VariantModel;
 
 @Entity
 public class Task implements Serializable {
@@ -55,6 +56,8 @@ public class Task implements Serializable {
     private String title;
     @ColumnInfo(name = "value")
     private String value;
+    @ColumnInfo(name = "minValue")
+    private int minValue;
     public Task(String unitIn, String unit, String currentprice, String id, String brand, String productType, String name, String type, String thumbnail, String price, String description, String vendorId, String quantity, String title,String value) {
         this.unitIn = unitIn;
         this.unit = unit;
@@ -90,6 +93,7 @@ public class Task implements Serializable {
         this.currentprice = currentprice;
         this.title=titlegetValues;
         this.value=valuesOfattr;
+        this.minValue=product.getUnits().get(0).getMinUnit();
     }
 
     public Task(ProductModel product, String quantity, String price) {
@@ -108,6 +112,34 @@ public class Task implements Serializable {
         this.quantity = quantity;
     }
 
+    public Task(VariantModel variantModel, String quantity, String unit, String unitIn, String currentprice, String price, String titlegetValues, String valuesOfattr, int minValue) {
+        this.id = variantModel.getId();
+        this.brand = "";
+        this.productType = variantModel.getProductType();
+        this.name = variantModel.getName();
+        this.type = variantModel.getType();
+        this.thumbnail = variantModel.getThumbnail();
+        this.price = price;
+        this.description = variantModel.getDescription();
+        this.vendorId = variantModel.getVendorId();
+        this.quantity = quantity;
+        this.unit = unit;
+        this.unitIn = unitIn;
+        this.currentprice = currentprice;
+        this.title=titlegetValues;
+        this.value=valuesOfattr;
+        this.minValue=variantModel.getUnits().get(0).getMinUnit();
+    }
+
+    public int getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(int minValue) {
+        this.minValue = minValue;
+    }
+
+    /*for variant*/
     public String getUnitIn() {
         return unitIn;
     }

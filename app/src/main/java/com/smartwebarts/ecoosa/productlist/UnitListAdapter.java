@@ -1,6 +1,7 @@
 package com.smartwebarts.ecoosa.productlist;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,9 +38,10 @@ public class UnitListAdapter extends RecyclerView.Adapter<UnitListAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         if (list!=null && list.get(position)!=null){
-            holder.tvUnit.setText(list.get(position).getUnit() + list.get(position).getUnitIn());
+            holder.tvUnit.setText(list.get(position).getUnit() + list.get(position).getUnitIn().toUpperCase());
             holder.tvPrice.setText(context.getString(R.string.currency) + list.get(position).getCurrentprice());
-
+            int temp=list.get(position).getMinUnit();
+            Log.d("MINUNIT==", "onBindViewHolder: "+temp);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

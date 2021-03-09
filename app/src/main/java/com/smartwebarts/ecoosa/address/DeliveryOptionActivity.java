@@ -546,6 +546,10 @@ public class DeliveryOptionActivity extends AppCompatActivity  implements Paymen
 //                        Toast.makeText(DeliveryOptionActivity.this, "Ordered", Toast.LENGTH_SHORT).show();
 
                         OrderedResponse response = new Gson().fromJson(message, OrderedResponse.class);
+                        if (response != null && response.getMessage() !=null){
+                            showSuccessMessage(response);
+                            //Log.d("Deepikaorder===", "success: "+response);
+                        }
                         if (response != null && response.getMessage() !=null && response.getMessage().equalsIgnoreCase("success")) {
                             showSuccessMessage(response);
                         } else {
@@ -555,7 +559,7 @@ public class DeliveryOptionActivity extends AppCompatActivity  implements Paymen
 
                     @Override
                     public void fail(String from) {
-                        showFailMessage(null);
+                       // showFailMessage(null);
                     }
                 });
 

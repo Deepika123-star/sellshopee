@@ -3,6 +3,7 @@ package com.smartwebarts.ecoosa.cart;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,10 @@ import com.smartwebarts.ecoosa.database.DatabaseClient;
 import com.smartwebarts.ecoosa.database.SaveProductList;
 import com.smartwebarts.ecoosa.database.Task;
 import com.smartwebarts.ecoosa.models.CouponModels;
+import com.smartwebarts.ecoosa.models.UnitModel;
+import com.smartwebarts.ecoosa.retrofit.Unit1;
 import com.smartwebarts.ecoosa.retrofit.UtilMethods;
+import com.smartwebarts.ecoosa.retrofit.VariantModel;
 import com.smartwebarts.ecoosa.retrofit.mCallBackResponse;
 import com.smartwebarts.ecoosa.utils.ApplicationConstants;
 import com.smartwebarts.ecoosa.utils.MyGlide;
@@ -42,6 +46,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
     ArrayList<Task> list;
     HashMap<String, CouponModels> map;
     HashMap<String, String> pricemap;
+//    private List<VariantModel>unitModel;
 
     public CartAdapter(CartActivity activity, ArrayList<Task> list) {
         this.activity = activity;
@@ -68,16 +73,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         holder.tvUnit.setText(list.get(position).getUnit()+list.get(position).getUnitIn());
         holder.tvCurrentPrice.setText(activity.getString(R.string.currency)+" "+list.get(position).getCurrentprice()+" X "+list.get(position).getQuantity());
         holder.txtQuan.setText(list.get(position).getQuantity());
+       // int min_Unit=unitModel.get(position).getUnits().get(0).getMinUnit();
         try {
             double price = Double.parseDouble("0"+list.get(position).getCurrentprice());
             double qty = Double.parseDouble("0"+list.get(position).getQuantity());
             double total = price*qty;
             holder.tvTotalPrice.setText(" "+total);
-
         } catch (Exception ignored){
 
         }
-
         holder.ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,12 +92,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         holder.plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int qty = Integer.parseInt("0"+list.get(position).getQuantity()) + 1;
+               int qty = (int)Double.parseDouble("0"+list.get(position).getQuantity().replaceAll("-", "")) + 1;
                 Task task = list.get(position);
                 task.setQuantity(""+qty);
 
-                int p = Integer.parseInt("0"+task.getPrice().trim().replaceAll("[^0-9]", ""));
-                int f = p*qty;
+                double p = Double.parseDouble("0"+task.getPrice().trim().replaceAll("[^0-9]", ""));
+                double f = p*qty;
                 task.setPrice(""+f);
 
                 holder.addToBag(task);
@@ -103,18 +107,33 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         holder.minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int qty = Integer.parseInt("0"+list.get(position).getQuantity());
+                int current_Qty = (int) Double.parseDouble("0"+ list.get(position).getMinValue());
+               int qty = (int) Double.parseDouble("0"+list.get(position).getQuantity().replaceAll("-", ""));
+                if (qty<=current_Qty){
+                   // --qty;
 
-                if (qty>1){
+                }
+              /*  else if (qty==tem){
+                    Task task = list.get(position);
+                    task.setQuantity(""+qty);
+                    Log.d("TAG==", "onClick: "+task.getPrice().trim());
+                    //if values has parse error
+                    int p = (int) Double.parseDouble("0"+task.getPrice().trim().replaceAll("-", ""));
+                    double f = p*qty;
+                    task.setPrice(""+f);
+                    holder.addToBag(task);
+                }*/
+                else {
                     --qty;
                     Task task = list.get(position);
                     task.setQuantity(""+qty);
-
-                    int p = Integer.parseInt("0"+task.getPrice());
-                    int f = p*qty;
+                    Log.d("TAG==", "onClick: "+task.getPrice().trim());
+                    /* if values has parse error*/
+                    double p = Double.parseDouble("0"+task.getPrice().trim().replaceAll("-", ""));
+                    double f = p*qty;
                     task.setPrice(""+f);
-
                     holder.addToBag(task);
+
                 }
 
             }
@@ -123,6 +142,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         if (map.get(list.get(position).getId())!=null) {
             changeLayout(holder, position, list.get(position), map, map.get(list.get(position).getId()));
         }
+
+
 
         holder.btnApplyCoupon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,6 +178,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                 }
             }
         });
+
 
     }
 
